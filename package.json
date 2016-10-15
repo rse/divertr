@@ -20,7 +20,7 @@
     "homepage": "https://github.com/rse/divertr",
     "bugs":     "https://github.com/rse/divertr/issues",
     "dependencies": {
-        "tokenizr":             "~1.1.0"
+        "tokenizr":             "~1.1.1"
     },
     "devDependencies": {
         "grunt":                "~1.0.1",

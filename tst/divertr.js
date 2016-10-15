@@ -26,6 +26,10 @@ var divertr = require("../lib/divertr.js")
 
 describe("Divertr Library", function () {
     it("basic functionality", function () {
+        expect(divertr(``))
+            .to.be.equal(``)
+        expect(divertr(`foo`))
+            .to.be.equal(`foo`)
         expect(divertr(`-{foo}-,-{bar}-,-{foo:foo:}-,-{bar:bar:}-`))
             .to.be.equal(`foo,bar,,`)
         expect(divertr(`-{foo}-,-{foo:foo:}-,-{foo:bar:}-`))
