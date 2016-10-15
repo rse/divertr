@@ -23,13 +23,47 @@ Installation
 $ npm install divertr
 ```
 
-Usage
------
+Example
+-------
+
+Script:
 
 ```js
 var divertr = require("divertr")
-divertr() // FIXME
+console.log(divertr(
+`section { -{s1}- } section { -{s2}- } section { -{s3}- }
+-{s1:foo:}--{s2:bar:}--{s3!:quux:}--{s1:foo2:}--{!s2:bar2:}--{s3:quux2:}-`))
 ```
+
+Output:
+
+```
+section { foofoo2 } section { bar2 } section { quux2 }
+```
+
+Application Programming Interface (API)
+---------------------------------------
+
+```
+interface API {
+    (
+        input: String,
+        options?: {
+            syntax?: ({
+                regexDump:  (RegExp | String);
+                regexEnter: (RegExp | String);
+                regexLeave: (RegExp | String);
+            } | String);
+            debug?: Boolean;
+        }
+    ): String;
+}
+
+declare var Divertr: API;
+```
+
+Pre-Defined Syntax
+------------------
 
 History
 -------

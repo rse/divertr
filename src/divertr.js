@@ -28,10 +28,71 @@ import Tokenizr from "tokenizr"
 const divertr = (input, options) => {
     /*  configuration options  */
     options = Object.assign({}, {
-        regexDump:  /<<([a-zA-Z][a-zA-Z0-9_]*)>>/,              /* dump directive  */
-        regexEnter: /\.\.(\!?)([a-zA-Z][a-zA-Z0-9_]*)(\!?)>>/,  /* enter directive */
-        regexLeave: /<<((?:[a-zA-Z][a-zA-Z0-9_]*)?)\.\./        /* leave directive */
+        syntax: "std",
+        debug:  false
     }, options)
+
+    /*  pre-defined syntax variants  */
+    let syntax = {
+        "std": {
+            regexDump:  /-\{([a-zA-Z][a-zA-Z0-9_]*)\}-/,              /* -{foo}-  */
+            regexEnter: /-\{(\!?)([a-zA-Z][a-zA-Z0-9_]*)(\!?):/,      /* -{foo:   */
+            regexLeave: /:((?:[a-zA-Z][a-zA-Z0-9_]*)?)\}-/            /* :foo}-   */
+        },
+        "alt": {
+            regexDump:  /-\{([a-zA-Z][a-zA-Z0-9_]*)\}-/,              /* -{foo}-  */
+            regexEnter: /-(\!?)([a-zA-Z][a-zA-Z0-9_]*)(\!?)->/,       /* -foo->   */
+            regexLeave: /<-((?:[a-zA-Z][a-zA-Z0-9_]*)?)-/             /* <-foo-   */
+        },
+        "xml": {
+            regexDump:  /<([a-zA-Z][a-zA-Z0-9_]*)\/>/,                /* <foo/>   */
+            regexEnter: /<(\!?)([a-zA-Z][a-zA-Z0-9_]*)(\!?)>/,        /* <foo>    */
+            regexLeave: /<\/((?:[a-zA-Z][a-zA-Z0-9_]*)?)>/            /* </foo>   */
+        },
+        "mustache": {
+            regexDump:  /\{\{([a-zA-Z][a-zA-Z0-9_]*)\}\}/,            /* {{foo}}  */
+            regexEnter: /\{\{#(\!?)([a-zA-Z][a-zA-Z0-9_]*)(\!?)\}\}/, /* {{#foo}} */
+            regexLeave: /\{\{\/((?:[a-zA-Z][a-zA-Z0-9_]*)?)\}\}/      /* {{/foo}} */
+        },
+        "rpm": {
+            regexDump:  /%\{([a-zA-Z][a-zA-Z0-9_]*)\}/,               /* %{foo}   */
+            regexEnter: /%\{(\!?)([a-zA-Z][a-zA-Z0-9_]*)(\!?):/,      /* %{foo:   */
+            regexLeave: /:((?:[a-zA-Z][a-zA-Z0-9_]*)?)\}/             /* :foo}    */
+        },
+        "wml-macro": {
+            regexDump:  /\{#([a-zA-Z][a-zA-Z0-9_]*)#\}/,              /* {#foo#}  */
+            regexEnter: /\{#(\!?)([a-zA-Z][a-zA-Z0-9_]*)(\!?)#:/,     /* {#foo#:  */
+            regexLeave: /:#((?:[a-zA-Z][a-zA-Z0-9_]*)?)#\}/           /* :#foo#}  */
+        },
+        "wml-diversion": {
+            regexDump:  /<<([a-zA-Z][a-zA-Z0-9_]*)>>/,                /* <<foo>>  */
+            regexEnter: /\.\.(\!?)([a-zA-Z][a-zA-Z0-9_]*)(\!?)>>/,    /* ..foo>>  */
+            regexLeave: /<<((?:[a-zA-Z][a-zA-Z0-9_]*)?)\.\./          /* <<foo..  */
+        }
+    }
+
+    /*  fetch the right syntax  */
+    if (typeof options.syntax === "string") {
+        if (syntax[options.syntax] === undefined)
+            throw new Error("unknown pre-defined syntax")
+        options.syntax = syntax[options.syntax]
+    }
+
+    /*  sanity check options  */
+    if (typeof options.syntax !== "object")
+        throw new Error("invalid syntax option")
+    if (typeof options.syntax.regexDump === "string")
+        options.syntax.regexDump = new RegExp(options.syntax.regexDump)
+    if (!(typeof options.syntax.regexDump === "object" && options.syntax.regexDump instanceof RegExp))
+        throw new Error("invalid syntax.regexDump option (RegExp or String expected)")
+    if (typeof options.syntax.regexEnter === "string")
+        options.syntax.regexEnter = new RegExp(options.syntax.regexEnter)
+    if (!(typeof options.syntax.regexEnter === "object" && options.syntax.regexEnter instanceof RegExp))
+        throw new Error("invalid syntax.regexEnter option (RegExp or String expected)")
+    if (typeof options.syntax.regexLeave === "string")
+        options.syntax.regexLeave = new RegExp(options.syntax.regexLeave)
+    if (!(typeof options.syntax.regexLeave === "object" && options.syntax.regexLeave instanceof RegExp))
+        throw new Error("invalid syntax.regexLeave option (RegExp or String expected)")
 
     /*  internal processing state   */
     let state = {
@@ -49,13 +110,13 @@ const divertr = (input, options) => {
 
     /*  establish the lexical parser  */
     let lexer = new Tokenizr()
-    lexer.rule(options.regexDump, (ctx, match) => {
+    lexer.rule(options.syntax.regexDump, (ctx, match) => {
         ctx.accept("DUMP", { name: match[1] })
     })
-    lexer.rule(options.regexEnter, (ctx, match) => {
+    lexer.rule(options.syntax.regexEnter, (ctx, match) => {
         ctx.accept("ENTER", { name: match[2], rewindNow: match[1] !== "", rewindNext: match[3] !== "" })
     })
-    lexer.rule(options.regexLeave, (ctx, match) => {
+    lexer.rule(options.syntax.regexLeave, (ctx, match) => {
         ctx.accept("LEAVE", { name: match[1] })
     })
     let plaintext = ""
@@ -65,7 +126,7 @@ const divertr = (input, options) => {
             plaintext = ""
         }
     })
-    lexer.rule(/./, (ctx, match) => {
+    lexer.rule(/(?:.|\r?\n)/, (ctx, match) => {
         plaintext += match[0]
         ctx.ignore()
     }, "plaintext")
@@ -76,6 +137,7 @@ const divertr = (input, options) => {
 
     /*  parse the input into tokens  */
     lexer.input(input)
+    lexer.debug(options.debug)
     lexer.tokens().forEach((token) => {
         if (token.isA("DUMP")) {
             /*  on-the-fly initialize location buffer  */
@@ -143,12 +205,16 @@ const divertr = (input, options) => {
         }
     })
 
+    /*  optionally show internal state  */
+    if (options.debug)
+        console.log("INTERNAL STATE AFTER PASS 1:\n" + JSON.stringify(state, null, "    "))
+
     /*
     **   PASS 2: Recursively expand the location structure
     **           by starting from the main location buffer
     */
 
-    /*  expand a partcicular diversion  */
+    /*  expand a particular diversion  */
     const expandDiversion = (buffer) => {
         /*  check for recursion by making sure
             the current location has not already been seen.  */
