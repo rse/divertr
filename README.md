@@ -88,6 +88,7 @@ Pre-Defined Syntax
 - `xml`:
 
     ```js
+    {
         regexDump:  /<([a-zA-Z][a-zA-Z0-9_]*)\/>/,                /* <foo/>   */
         regexEnter: /<(\!?)([a-zA-Z][a-zA-Z0-9_]*)(\!?)>/,        /* <foo>    */
         regexLeave: /<\/((?:[a-zA-Z][a-zA-Z0-9_]*)?)>/            /* </foo>   */
