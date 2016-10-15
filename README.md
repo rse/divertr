@@ -65,6 +65,75 @@ declare var Divertr: API;
 Pre-Defined Syntax
 ------------------
 
+- `std`:
+
+    ```js
+    {
+        regexDump:  /-\{([a-zA-Z][a-zA-Z0-9_]*)\}-/,              /* -{foo}-  */
+        regexEnter: /-\{(\!?)([a-zA-Z][a-zA-Z0-9_]*)(\!?):/,      /* -{foo:   */
+        regexLeave: /:((?:[a-zA-Z][a-zA-Z0-9_]*)?)\}-/            /* :foo}-   */
+    }
+    ```
+
+- `alt`:
+
+    ```js
+    {
+        regexDump:  /-\{([a-zA-Z][a-zA-Z0-9_]*)\}-/,              /* -{foo}-  */
+        regexEnter: /-(\!?)([a-zA-Z][a-zA-Z0-9_]*)(\!?)->/,       /* -foo->   */
+        regexLeave: /<-((?:[a-zA-Z][a-zA-Z0-9_]*)?)-/             /* <-foo-   */
+    }
+    ```
+
+- `xml`:
+
+    ```js
+        regexDump:  /<([a-zA-Z][a-zA-Z0-9_]*)\/>/,                /* <foo/>   */
+        regexEnter: /<(\!?)([a-zA-Z][a-zA-Z0-9_]*)(\!?)>/,        /* <foo>    */
+        regexLeave: /<\/((?:[a-zA-Z][a-zA-Z0-9_]*)?)>/            /* </foo>   */
+    }
+    ```
+
+- `mustache`
+
+    ```js
+    {
+        regexDump:  /\{\{([a-zA-Z][a-zA-Z0-9_]*)\}\}/,            /* {{foo}}  */
+        regexEnter: /\{\{#(\!?)([a-zA-Z][a-zA-Z0-9_]*)(\!?)\}\}/, /* {{#foo}} */
+        regexLeave: /\{\{\/((?:[a-zA-Z][a-zA-Z0-9_]*)?)\}\}/      /* {{/foo}} */
+    }
+    ```
+
+- `rpm`:
+
+    ```js
+    {
+        regexDump:  /%\{([a-zA-Z][a-zA-Z0-9_]*)\}/,               /* %{foo}   */
+        regexEnter: /%\{(\!?)([a-zA-Z][a-zA-Z0-9_]*)(\!?):/,      /* %{foo:   */
+        regexLeave: /:((?:[a-zA-Z][a-zA-Z0-9_]*)?)\}/             /* :foo}    */
+    }
+    ```
+
+- `wml-macro`:
+
+    ```js
+    {
+        regexDump:  /\{#([a-zA-Z][a-zA-Z0-9_]*)#\}/,              /* {#foo#}  */
+        regexEnter: /\{#(\!?)([a-zA-Z][a-zA-Z0-9_]*)(\!?)#:/,     /* {#foo#:  */
+        regexLeave: /:#((?:[a-zA-Z][a-zA-Z0-9_]*)?)#\}/           /* :#foo#}  */
+    }
+    ```
+
+- `wml-diversion`
+
+    ```js
+    {
+        regexDump:  /<<([a-zA-Z][a-zA-Z0-9_]*)>>/,                /* <<foo>>  */
+        regexEnter: /\.\.(\!?)([a-zA-Z][a-zA-Z0-9_]*)(\!?)>>/,    /* ..foo>>  */
+        regexLeave: /<<((?:[a-zA-Z][a-zA-Z0-9_]*)?)\.\./          /* <<foo..  */
+    }
+    ```
+
 History
 -------
 
