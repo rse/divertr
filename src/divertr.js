@@ -30,8 +30,7 @@ const divertr = (input, options) => {
     options = Object.assign({}, {
         regexDump:  /<<([a-zA-Z][a-zA-Z0-9_]*)>>/,              /* dump directive  */
         regexEnter: /\.\.(\!?)([a-zA-Z][a-zA-Z0-9_]*)(\!?)>>/,  /* enter directive */
-        regexLeave: /<<((?:[a-zA-Z][a-zA-Z0-9_]*)?)\.\./,       /* leave directive */
-        verbose:    false
+        regexLeave: /<<((?:[a-zA-Z][a-zA-Z0-9_]*)?)\.\./        /* leave directive */
     }, options)
 
     /*  internal processing state   */
