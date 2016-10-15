@@ -36,7 +36,7 @@ module.exports = function (grunt) {
                 jshintrc: "jshint.json"
             },
             "gruntfile":  [ "Gruntfile.js" ],
-            "gdo": [ "src/**/*.js", "tst/**/*.js" ]
+            "divertr": [ "src/**/*.js", "tst/**/*.js" ]
         },
         browserify: {
             "divertr": {
