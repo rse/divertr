@@ -139,7 +139,7 @@ declare var Divertr: API;
 Pre-Defined Syntax
 ------------------
 
-- `std`:
+- `std` (the default):
 
     ```js
     {
