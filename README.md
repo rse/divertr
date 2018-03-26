@@ -45,7 +45,6 @@ directives found in the input data:
     trolled by the `!` characters preceding or following the `name`
     identifier:
 
-
     - `!name`<br/>
         This sets the data flow position to the begin of location `name`,
         i.e. it actually discards the current (already diverted) contents
@@ -222,7 +221,7 @@ for reuse as a library.
 License
 -------
 
-Copyright (c) 1997-2017 Ralf S. Engelschall (http://engelschall.com/)
+Copyright (c) 1997-2018 Ralf S. Engelschall (http://engelschall.com/)
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
