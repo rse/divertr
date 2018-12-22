@@ -40,5 +40,12 @@
         "browserify-derequire": "0.9.6",
         "browserify-replace":   "0.9.3",
         "source-map-support":   "0.5.9"
+    },
+    "engines": {
+        "node":                 ">=8.0.0"
+    },
+    "scripts": {
+        "prepublishOnly":  "grunt default",
+        "build":           "grunt default"
     }
 }

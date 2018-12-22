@@ -45,10 +45,18 @@ module.exports = function (grunt) {
                 },
                 options: {
                     transform: [
-                        [ "babelify", { presets: [ "es2015" ] } ]
+                        [ "babelify", {
+                            presets: [
+                                [ "@babel/preset-env", {
+                                    "targets": {
+                                        "browsers": "last 8 versions, > 1%, ie 11"
+                                    }
+                                } ]
+                            ]
+                        } ],
+                        [ "uglifyify", { sourceMap: false, global: true } ]
                     ],
                     plugin: [
-                        [ "minifyify", { map: "divertr.map", output: "lib/divertr.map" } ],
                         [ "browserify-derequire" ],
                         [ "browserify-header" ]
                     ],
