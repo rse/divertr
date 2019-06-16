@@ -20,7 +20,7 @@
     "homepage": "https://github.com/rse/divertr",
     "bugs":     "https://github.com/rse/divertr/issues",
     "dependencies": {
-        "tokenizr":             "1.5.2"
+        "tokenizr":             "1.5.3"
     },
     "devDependencies": {
         "grunt":                "1.0.4",
@@ -33,8 +33,8 @@
         "mocha":                "6.1.4",
         "chai":                 "4.2.0",
         "babelify":             "10.0.0",
-        "@babel/core":          "7.4.3",
-        "@babel/preset-env":    "7.4.3",
+        "@babel/core":          "7.4.5",
+        "@babel/preset-env":    "7.4.5",
         "uglifyify":            "5.0.1",
         "browserify-header":    "1.0.0",
         "browserify-derequire": "1.0.0",
