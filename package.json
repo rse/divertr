@@ -1,6 +1,6 @@
 {
     "name":        "divertr",
-    "version":     "1.0.3",
+    "version":     "1.0.4",
     "description": "Text Diversion Filter",
     "keywords":    [ "text", "diversion", "filter", "location", "dump", "enter", "leave" ],
     "main":        "lib/divertr.js",
